@@ -1,29 +1,22 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
+        stage("Compile") {
             steps {
-                checkout scm
+                // gradlew 파일에 실행 권한을 추가하는 명령어
+                sh 'chmod +x ./gradlew'
+                sh './gradlew compileJava'
             }
         }
-        stage('Compile') {
-            steps {
-                script {
-                    // 권한 부여
-                    sh 'chmod +x gradlew'
-                    // Gradle 실행
-                    sh './gradlew compileJava'
-                }
-            }
-        }
-        stage('Build') {
+        stage("Build") {
             steps {
                 sh './gradlew build'
             }
         }
-        stage('Unit Test') {
+        stage("Unittest") {
             steps {
                 sh './gradlew test'
+                echo 'hi'
             }
         }
     }
