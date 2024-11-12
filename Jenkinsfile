@@ -1,19 +1,29 @@
 pipeline {
     agent any
     stages {
-        stage("Compile") {
+        stage('Checkout') {
             steps {
-                sh "./gradlew compileJava"
+                checkout scm
             }
         }
-        stage("Build") {
+        stage('Compile') {
             steps {
-                sh "./gradlew build"
+                script {
+                    // 권한 부여
+                    sh 'chmod +x gradlew'
+                    // Gradle 실행
+                    sh './gradlew compileJava'
+                }
             }
         }
-        stage("Unit test") {
+        stage('Build') {
             steps {
-                sh "./gradlew test"
+                sh './gradlew build'
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                sh './gradlew test'
             }
         }
     }
